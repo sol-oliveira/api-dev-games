@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using DevGames.API.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -24,13 +25,13 @@ namespace DevGames.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post()
+        public IActionResult Post(AddBoardInputModel model)
         {
-            return Ok();
+            return CreatedAtAction("GetById", new { id = model.Id }, model);
         }
 
         [HttpPut]
-        public IActionResult Put()
+        public IActionResult Put(UpdateBoardInputModel model)
         {
             return Ok();
         }

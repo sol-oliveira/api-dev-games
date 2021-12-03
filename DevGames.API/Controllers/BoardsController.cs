@@ -1,4 +1,5 @@
-﻿using DevGames.API.Entities;
+﻿using AutoMapper;
+using DevGames.API.Entities;
 using DevGames.API.Models;
 using DevGames.API.Persistence;
 using Microsoft.AspNetCore.Http;
@@ -15,10 +16,12 @@ namespace DevGames.API.Controllers
     public class BoardsController : ControllerBase  
     {
         private readonly DevGamesContext context;
+        private readonly IMapper mapper;
 
-        public BoardsController(DevGamesContext context)
+        public BoardsController(DevGamesContext context, IMapper mapper)
         {
             this.context = context;
+            this.mapper = mapper;
 
         }
         [HttpGet]
@@ -35,13 +38,15 @@ namespace DevGames.API.Controllers
             if(board == null)
                 return NotFound();
 
-            return Ok(context.Boards);
+            return Ok(board);
         }
 
         [HttpPost]
         public IActionResult Post(AddBoardInputModel model)
         {
-            var board = new Board(model.Id, model.GameTitle, model.Description, model.Rules);
+            var board = mapper.Map<Board>(model);
+
+            //var board = new Board(model.Id, model.GameTitle, model.Description, model.Rules);
 
             context.Boards.Add(board);
 

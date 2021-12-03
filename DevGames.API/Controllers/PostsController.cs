@@ -28,7 +28,13 @@ namespace DevGames.API.Controllers
         public IActionResult Post(int id, AddPostInputModel model)
         {
             return CreatedAtAction(nameof(GetById), new { id = model.Id }, model);
-        }       
+        }
+
+        [HttpPost("{postId}/comments")]
+        public IActionResult PostComment(int id, AddPostInputModel model)
+        {
+            return NoContent();
+        }
     }
 
 }

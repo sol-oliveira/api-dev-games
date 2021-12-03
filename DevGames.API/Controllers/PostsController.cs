@@ -64,8 +64,22 @@ namespace DevGames.API.Controllers
         }
 
         [HttpPost("{postId}/comments")]
-        public IActionResult PostComment(int id, AddPostInputModel model)
+        public IActionResult PostComment(int id, int postId, AddPostInputModel model)
         {
+            var board = context.Boards.SingleOrDefault(b => b.Id == id);
+
+            if (board == null)
+                return NotFound();
+
+            var post = board.Posts.SingleOrDefault(p => p.Id == postId);
+
+            if (post == null)
+                return NotFound();
+
+            var comment = new Comment(model.Title, model.Description, model.User);
+
+            post.AddComment(comment);
+
             return NoContent();
         }
     }

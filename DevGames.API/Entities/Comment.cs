@@ -7,11 +7,12 @@ namespace DevGames.API.Entities
 {
     public class Comment
     {
-        public Comment(string title, string description, string user)
+        public Comment(string title, string description, string user, int postId)
         {
             Title = title;
             Description = description;
             User = user;
+            PostId = postId;
 
             CreateAt = DateTime.Now;
         }
@@ -20,6 +21,7 @@ namespace DevGames.API.Entities
         public string Description { get; private set; }
         public string User { get; private set; }
         public DateTime CreateAt { get; private set; }
+        public int PostId { get; private set; }
 
     }
 }

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace DevGames.API.Models
 {
-    public record UpdateBoardInputModel(int Id, string Description, string Rules)
+    public record UpdateBoardInputModel(string Description, string Rules)
     {
     }
 }

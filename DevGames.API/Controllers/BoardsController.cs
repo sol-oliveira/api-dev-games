@@ -13,7 +13,7 @@ namespace DevGames.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BoardsController : ControllerBase  
+    public class BoardsController : ControllerBase
     {
         private readonly DevGamesContext context;
         private readonly IMapper mapper;
@@ -34,8 +34,8 @@ namespace DevGames.API.Controllers
         public IActionResult GetById(int id)
         {
             var board = context.Boards.SingleOrDefault(b => b.Id == id);
-            
-            if(board == null)
+
+            if (board == null)
                 return NotFound();
 
             return Ok(board);
@@ -50,7 +50,7 @@ namespace DevGames.API.Controllers
 
             context.Boards.Add(board);
 
-            return CreatedAtAction("GetById", new { id = model.Id }, model);
+            return CreatedAtAction("GetById", new { id = board.Id }, model);
         }
 
         [HttpPut]

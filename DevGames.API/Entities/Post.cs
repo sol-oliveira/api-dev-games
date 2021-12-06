@@ -7,6 +7,12 @@ namespace DevGames.API.Entities
 {
     public class Post
     {
+        public Post(string title, string description)
+        {
+            Title = title;
+            Description = description;
+        }
+
         public Post(string title, string description, int boardId)
         {
             Title = title;

@@ -56,7 +56,7 @@ namespace DevGames.API.Controllers
             if (board == null)
                 return NotFound();
 
-            var post = new Post(model.Id, model.Title, model.Description);
+            var post = new Post(model.Title, model.Description);
 
             board.AddPost(post);
 

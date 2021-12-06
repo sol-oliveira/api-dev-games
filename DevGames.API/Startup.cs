@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -27,7 +28,8 @@ namespace DevGames.API
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
+        {             
+            
             services.AddSingleton<DevGamesContext>();
             services.AddAutoMapper(typeof(BoardMapper));
             services.AddControllers();
@@ -35,18 +37,22 @@ namespace DevGames.API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "DevGames.API", Version = "v1" });
             });
+
+            services.AddDbContext<DevGamesContext>(o =>
+               o.UseInMemoryDatabase(Configuration.GetConnectionString("DevGamesCs")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "DevGames.API v1"));
             }
+
 
             app.UseHttpsRedirection();
 

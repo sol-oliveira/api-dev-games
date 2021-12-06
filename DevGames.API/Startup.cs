@@ -28,9 +28,11 @@ namespace DevGames.API
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {             
-            
-            services.AddSingleton<DevGamesContext>();
+        {
+            services.AddDbContext<DevGamesContext>(o =>
+              o.UseSqlServer(Configuration.GetConnectionString("DevGamesCs")));
+
+           // services.AddSingleton<DevGamesContext>();
             services.AddAutoMapper(typeof(BoardMapper));
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -38,8 +40,7 @@ namespace DevGames.API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "DevGames.API", Version = "v1" });
             });
 
-            services.AddDbContext<DevGamesContext>(o =>
-               o.UseInMemoryDatabase(Configuration.GetConnectionString("DevGamesCs")));
+           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

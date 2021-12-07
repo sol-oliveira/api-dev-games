@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace DevGames.API.Persistence.Migration
+namespace DevGames.API.Persistence.Migrations
 {
     [DbContext(typeof(DevGamesContext))]
-    [Migration("20211206211007_MigrationInitial")]
-    partial class MigrationInitial
+    [Migration("20211207163925_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

@@ -44,11 +44,11 @@ namespace DevGames.API.Controllers
         [HttpPost]
         public IActionResult Post(AddBoardInputModel model)
         {
-            var board = mapper.Map<Board>(model);
-
-            //var board = new Board(model.Id, model.GameTitle, model.Description, model.Rules);
+            var board = mapper.Map<Board>(model);        
 
             context.Boards.Add(board);
+
+            context.SaveChanges();
 
             return CreatedAtAction("GetById", new { id = board.Id }, model);
         }
@@ -62,6 +62,8 @@ namespace DevGames.API.Controllers
                 return NotFound();
 
             board.Update(model.Description, model.Rules);
+
+            context.SaveChanges();
 
             return NoContent();
         }

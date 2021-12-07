@@ -7,13 +7,7 @@ namespace DevGames.API.Entities
 {
     public class Comment
     {
-        public Comment(string title, string description, string user)
-        {
-            Title = title;
-            Description = description;
-            User = user;
-        }
-
+        
         public Comment(string title, string description, string user, int postId)
         {
             Title = title;

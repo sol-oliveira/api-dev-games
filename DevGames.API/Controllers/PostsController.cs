@@ -1,6 +1,7 @@
 ﻿using DevGames.API.Entities;
 using DevGames.API.Models;
 using DevGames.API.Persistence;
+using DevGames.API.Persistence.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -14,17 +15,17 @@ namespace DevGames.API.Controllers
     [ApiController]
     public class PostsController : ControllerBase
     {
-        private readonly DevGamesContext context;
+        private readonly IPostRepository repository;
 
-        public PostsController(DevGamesContext context)
+        public PostsController(IPostRepository repository)
         {
-            this.context = context;
+            this.repository = repository;
         }
 
         [HttpGet]
         public IActionResult GetAll(int id)
         {
-            var posts = context.Posts.Where(b => b.BoardId == id);           
+            var posts = repository.GetAllByBoard(id);      
 
             return Ok(posts);
         }
@@ -32,7 +33,7 @@ namespace DevGames.API.Controllers
         [HttpGet("{postId}")]
         public IActionResult GetById(int id, int postId)
         {
-             var post = context.Posts.SingleOrDefault(p => p.Id == postId);
+            var post = repository.GetById(postId);
 
             if (post == null)
                 return NotFound();
@@ -45,8 +46,7 @@ namespace DevGames.API.Controllers
         {
             var post = new Post(model.Title, model.Description, id);
 
-            context.Posts.Add(post);
-            context.SaveChanges();
+            repository.Add(post);
 
             return CreatedAtAction(nameof(GetById), new { id = post.Id, postId = post.Id }, model);
         }
@@ -54,15 +54,14 @@ namespace DevGames.API.Controllers
         [HttpPost("{postId}/comments")]
         public IActionResult PostComment(int id, int postId, AddPostInputModel model)
         {
-            var postExists = context.Posts.Any(p => p.Id == postId);
+             var postExists = repository.PostExists(postId);
 
             if (!postExists)
                 return NotFound();
 
             var comment = new Comment(model.Title, model.Description, model.User, postId);
 
-            context.Comments.Add(comment);
-            context.SaveChanges();
+            repository.AddComment(comment);
 
             return NoContent();
         }

@@ -2,6 +2,7 @@
 using DevGames.API.Entities;
 using DevGames.API.Models;
 using DevGames.API.Persistence;
+using DevGames.API.Persistence.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -15,25 +16,27 @@ namespace DevGames.API.Controllers
     [ApiController]
     public class BoardsController : ControllerBase
     {
-        private readonly DevGamesContext context;
+        private readonly IBoardRepository repository;
         private readonly IMapper mapper;
 
-        public BoardsController(DevGamesContext context, IMapper mapper)
+        public BoardsController(IBoardRepository repository, IMapper mapper)
         {
-            this.context = context;
+            this.repository = repository;
             this.mapper = mapper;
 
         }
         [HttpGet]
         public IActionResult GetAll()
         {
-            return Ok(context.Boards);
+            var boards = repository.GetAll();
+
+            return Ok(boards);
         }
 
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
-            var board = context.Boards.SingleOrDefault(b => b.Id == id);
+            var board = repository.GetById(id);
 
             if (board == null)
                 return NotFound();
@@ -44,11 +47,9 @@ namespace DevGames.API.Controllers
         [HttpPost]
         public IActionResult Post(AddBoardInputModel model)
         {
-            var board = mapper.Map<Board>(model);        
+            var board = mapper.Map<Board>(model);
 
-            context.Boards.Add(board);
-
-            context.SaveChanges();
+            repository.Add(board);
 
             return CreatedAtAction("GetById", new { id = board.Id }, model);
         }
@@ -56,14 +57,14 @@ namespace DevGames.API.Controllers
         [HttpPut]
         public IActionResult Put(int id, UpdateBoardInputModel model)
         {
-            var board = context.Boards.SingleOrDefault(b => b.Id == id);
+            var board = repository.GetById(id);
 
             if (board == null)
                 return NotFound();
 
             board.Update(model.Description, model.Rules);
 
-            context.SaveChanges();
+            repository.Update(board); 
 
             return NoContent();
         }

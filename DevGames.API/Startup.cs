@@ -1,5 +1,6 @@
 using DevGames.API.Mappers;
 using DevGames.API.Persistence;
+using DevGames.API.Persistence.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -32,7 +33,10 @@ namespace DevGames.API
             services.AddDbContext<DevGamesContext>(o =>
               o.UseSqlServer(Configuration.GetConnectionString("DevGamesCs")));
 
-           // services.AddSingleton<DevGamesContext>();
+            services.AddScoped<IBoardRepository, BoardRepository>();
+            services.AddScoped<IPostRepository, PostRepository>();
+
+            // services.AddSingleton<DevGamesContext>();
             services.AddAutoMapper(typeof(BoardMapper));
             services.AddControllers();
             services.AddSwaggerGen(c =>

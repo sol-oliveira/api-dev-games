@@ -1,4 +1,5 @@
 ﻿using DevGames.API.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +29,7 @@ namespace DevGames.API.Persistence.Repositories
 
         public Board GetById(int id)
         {
-            return context.Boards.SingleOrDefault(b => b.Id == id);
+            return context.Boards.Include(p => p.Posts).SingleOrDefault(b => b.Id == id);
         }
 
         public void Update(Board board)
